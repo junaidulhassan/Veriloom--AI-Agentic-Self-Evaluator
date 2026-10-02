@@ -1,0 +1,126 @@
+:root {
+  --coral-50: #fff1ee;
+  --coral-100: #ffe0da;
+  --coral-200: #ffc4b8;
+  --coral-300: #ffa08f;
+  --coral-400: #ff7f6b;
+  --coral-500: #ff6b57;
+  --coral-600: #f04f3b;
+  --coral-700: #c93a28;
+  --charcoal-900: #1c1c1f;
+  --charcoal-800: #26262b;
+  --charcoal-700: #34343a;
+  --charcoal-600: #4a4a52;
+  --cream: #fff8f5;
+
+  --success: #2f9e6b;
+  --warning: #f2a93b;
+  --error: #8f1d21;
+  --info: #3b6ea8;
+
+  --page: var(--coral-500);
+  --page-gradient: linear-gradient(140deg, var(--coral-400) 0%, var(--coral-500) 48%, var(--coral-600) 100%);
+  --blob-a: rgb(255 196 184 / 0.55);
+  --blob-b: rgb(201 58 40 / 0.35);
+  --blob-c: rgb(255 248 245 / 0.35);
+  --grain-opacity: 0.09;
+
+  --surface: rgb(255 248 245 / 0.82);
+  --surface-strong: rgb(255 248 245 / 0.94);
+  --surface-sunken: rgb(255 224 218 / 0.55);
+  --glass-border: rgb(255 255 255 / 0.65);
+  --line: rgb(28 28 31 / 0.1);
+  --line-strong: rgb(28 28 31 / 0.2);
+
+  --ink: var(--charcoal-900);
+  --ink-soft: #3a3a41;
+  --ink-muted: #5d5d66;
+  --on-page: var(--charcoal-900);
+
+  --btn: var(--charcoal-900);
+  --btn-hover: var(--charcoal-800);
+  --btn-ink: var(--cream);
+  --accent: var(--coral-600);
+  --accent-soft: var(--coral-100);
+  --focus: var(--charcoal-900);
+  --dash: rgb(28 28 31 / 0.45);
+
+  --terminal: #1c1c1f;
+  --terminal-ink: #f4ece8;
+
+  --skeleton-base: rgb(255 196 184 / 0.5);
+  --skeleton-shine: rgb(255 248 245 / 0.75);
+  --scroll-thumb: rgb(28 28 31 / 0.25);
+
+  --chart-surface: #fff8f5;
+  --chart-grid: rgb(28 28 31 / 0.08);
+  --chart-axis: #5d5d66;
+  --chart-ink: #1c1c1f;
+  --series-1: #e5533f;
+  --series-2: #2a6fc9;
+  --series-3: #1a9e70;
+  --series-4: #7a4fc4;
+  --series-5: #d98a00;
+  --series-6: #d45487;
+  --series-neutral: #4a4a52;
+  --seq-0: #fff1ee;
+  --seq-1: #ffc4b8;
+  --seq-2: #ff8f7a;
+  --seq-3: #f04f3b;
+  --seq-4: #a8301f;
+  --seq-5: #5c1a12;
+}
+
+html[data-theme='charcoal'] {
+  --page: var(--charcoal-900);
+  --page-gradient: linear-gradient(140deg, #232327 0%, var(--charcoal-900) 50%, #151517 100%);
+  --blob-a: rgb(255 107 87 / 0.18);
+  --blob-b: rgb(240 79 59 / 0.12);
+  --blob-c: rgb(255 160 143 / 0.08);
+  --grain-opacity: 0.06;
+
+  --surface: rgb(38 38 43 / 0.82);
+  --surface-strong: rgb(38 38 43 / 0.95);
+  --surface-sunken: rgb(28 28 31 / 0.7);
+  --glass-border: rgb(255 248 245 / 0.08);
+  --line: rgb(255 248 245 / 0.1);
+  --line-strong: rgb(255 248 245 / 0.2);
+
+  --ink: var(--cream);
+  --ink-soft: #e4d9d4;
+  --ink-muted: #ada3a0;
+  --on-page: var(--cream);
+
+  --btn: var(--coral-500);
+  --btn-hover: var(--coral-400);
+  --btn-ink: var(--charcoal-900);
+  --accent: var(--coral-400);
+  --accent-soft: rgb(255 107 87 / 0.14);
+  --focus: var(--coral-400);
+  --dash: rgb(255 127 107 / 0.6);
+
+  --terminal: #121214;
+  --terminal-ink: #f4ece8;
+
+  --skeleton-base: rgb(255 248 245 / 0.06);
+  --skeleton-shine: rgb(255 127 107 / 0.12);
+  --scroll-thumb: rgb(255 248 245 / 0.2);
+
+  --chart-surface: #26262b;
+  --chart-grid: rgb(255 248 245 / 0.08);
+  --chart-axis: #ada3a0;
+  --chart-ink: #fff8f5;
+  --series-1: #e8553f;
+  --series-2: #3580d8;
+  --series-3: #1a9a6c;
+  --series-4: #8a66dc;
+  --series-5: #c28118;
+  --series-6: #d2548a;
+  --series-neutral: #ada3a0;
+  --seq-0: #2e2e33;
+  --seq-1: #5c2b24;
+  --seq-2: #8f3426;
+  --seq-3: #c93a28;
+  --seq-4: #ff6b57;
+  --seq-5: #ffc4b8;
+}
