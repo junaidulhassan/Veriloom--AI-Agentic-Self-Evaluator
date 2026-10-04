@@ -13,6 +13,7 @@ import { snappy } from '@/lib/motion'
 import { useUiStore } from '@/store/ui'
 import { loadDashboardPage } from '../router'
 import { SettingsMenu, ThemeToggle } from './SettingsMenu'
+import { UserMenu } from './UserMenu'
 
 const links = [
   { to: '/veriloom/chat/ai-assistant', label: 'Assistant', icon: MessageSquareText, match: '/veriloom/chat' },
@@ -104,6 +105,7 @@ export function TopNav() {
           </button>
           <ThemeToggle />
           <SettingsMenu />
+          <UserMenu />
         </div>
       </nav>
     </header>

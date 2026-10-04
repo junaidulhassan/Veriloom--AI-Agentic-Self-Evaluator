@@ -1,6 +1,7 @@
 import { env } from '@/lib/env'
 import type { ChatRequest, StreamEvent } from '@/types/api'
 import { ApiError, fromErrorBody } from './errors'
+import { notifyUnauthorized } from './session'
 
 export class StreamUnsupportedError extends Error {}
 
@@ -15,6 +16,7 @@ export async function streamChat(
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream' },
       body: JSON.stringify(payload),
+      credentials: 'include',
       signal,
     })
   } catch (error) {
@@ -28,6 +30,7 @@ export async function streamChat(
   if (response.status === 404 || response.status === 405)
     throw new StreamUnsupportedError('Streaming endpoint not available')
   if (!response.ok) {
+    if (response.status === 401) notifyUnauthorized()
     const body = await response.json().catch(() => undefined)
     throw fromErrorBody(response.status, body, `Request failed with status ${response.status}`)
   }

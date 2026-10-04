@@ -1,9 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
-import { adminApi } from '@/api/admin'
+import { workspaceApi } from '@/api/workspace'
 import { qk } from '@/api/keys'
 
 export function useSystemInfo() {
-  return useQuery({ queryKey: qk.systemInfo, queryFn: adminApi.system, staleTime: 5 * 60_000, retry: false })
+  return useQuery({
+    queryKey: qk.systemInfo,
+    queryFn: workspaceApi.system,
+    staleTime: 5 * 60_000,
+    retry: false,
+  })
 }
 
 export function useMaxAttempts() {

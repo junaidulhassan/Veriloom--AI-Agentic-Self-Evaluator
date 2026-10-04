@@ -4,7 +4,9 @@ type W = TimeWindowParams
 
 export const qk = {
   tools: ['system', 'tools'] as const,
-  systemInfo: ['admin', 'system'] as const,
+  me: ['auth', 'me'] as const,
+  account: ['auth', 'account'] as const,
+  systemInfo: ['workspace', 'system'] as const,
   conversations: (search?: string) => ['chat', 'conversations', search ?? ''] as const,
   conversationsRoot: ['chat', 'conversations'] as const,
   conversation: (id: string) => ['chat', 'conversation', id] as const,
@@ -20,5 +22,5 @@ export const qk = {
   dashboard: (section: string, w: W, extra?: unknown) =>
     ['dashboard', section, w.start ?? '', w.end ?? '', extra ?? null] as const,
   dashboardRoot: ['dashboard'] as const,
-  admin: (section: string, extra?: unknown) => ['admin', section, extra ?? null] as const,
+  workspace: (section: string, extra?: unknown) => ['workspace', section, extra ?? null] as const,
 }

@@ -31,5 +31,5 @@ export const dashboardSections: SectionDef[] = [
   { id: 'rag', letter: 'H', label: 'RAG Analytics', icon: Database },
   { id: 'explorer', letter: 'I', label: 'RAG Explorer', icon: FileSearch },
   { id: 'history', letter: 'J', label: 'Execution History', icon: History },
-  { id: 'admin', letter: 'K', label: 'Admin & Controls', icon: Gauge },
+  { id: 'controls', letter: 'K', label: 'Data & Controls', icon: Gauge },
 ]

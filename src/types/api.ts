@@ -907,3 +907,54 @@ export interface ResetMetricsRequest {
   confirm: 'RESET'
   reset_chunk_counters?: boolean
 }
+
+export interface User {
+  id: string
+  first_name: string
+  last_name: string
+  email: string
+  role: string
+  created_at: ISODate
+  last_login_at: ISODate | null
+}
+
+export interface RegisterRequest {
+  first_name: string
+  last_name: string
+  email: string
+  password: string
+  confirm_password: string
+}
+
+export interface LoginRequest {
+  email: string
+  password: string
+}
+
+export interface ProfileUpdateRequest {
+  first_name?: string
+  last_name?: string
+  email?: string
+  current_password?: string
+}
+
+export interface PasswordChangeRequest {
+  current_password: string
+  new_password: string
+  confirm_password: string
+}
+
+export interface AccountDeleteRequest {
+  password: string
+  confirm: 'DELETE'
+}
+
+export interface AccountSummary {
+  user: User
+  conversations: number
+  messages: number
+  documents: number
+  chunks: number
+  requests: number
+  active_sessions: number
+}

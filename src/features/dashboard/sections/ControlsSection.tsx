@@ -19,7 +19,7 @@ import {
   SquareTerminal,
   Trash2,
 } from 'lucide-react'
-import { adminApi } from '@/api/admin'
+import { workspaceApi } from '@/api/workspace'
 import { describeError } from '@/api/errors'
 import { Button } from '@/components/ui/Button'
 import { Card, CardHeader } from '@/components/ui/Card'
@@ -64,7 +64,7 @@ const schema = z
   })
 type FormValues = z.infer<typeof schema>
 
-function useAdminAction(spec: ActionSpec) {
+function useControlAction(spec: ActionSpec) {
   const queryClient = useQueryClient()
   return useMutation({
     meta: { silent: true },
@@ -92,7 +92,7 @@ function useAdminAction(spec: ActionSpec) {
       toast.success(`${spec.title}: removed ${result.deleted} record${result.deleted === 1 ? '' : 's'}`),
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['dashboard'] })
-      queryClient.invalidateQueries({ queryKey: ['admin'] })
+      queryClient.invalidateQueries({ queryKey: ['workspace'] })
       queryClient.invalidateQueries({ queryKey: ['chat'] })
     },
   })
@@ -107,7 +107,7 @@ function ActionDialog({
   open: boolean
   onOpenChange: (open: boolean) => void
 }) {
-  const mutation = useAdminAction(spec)
+  const mutation = useControlAction(spec)
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { scope: 'all', before: '', toggle: false, confirm: '', word: spec.word },
@@ -287,7 +287,7 @@ function SystemPanel() {
   )
 }
 
-function DocumentsAdmin() {
+function DocumentsControls() {
   const docs = useDocuments()
   const remove = useDeleteDocument()
   const reindex = useReindex()
@@ -398,7 +398,7 @@ function DocumentsAdmin() {
   )
 }
 
-export default function AdminSection() {
+export default function ControlsSection() {
   const newChat = useChatStore((s) => s.newChat)
   const actions = useMemo<ActionSpec[]>(
     () => [
@@ -413,7 +413,7 @@ export default function AdminSection() {
           label: 'Only non-final attempts',
           hint: 'Keep the verdict that decided each final answer.',
         },
-        run: (s, t) => adminApi.clearEvaluations({ ...s, only_non_final: t, reset_request_flags: true }),
+        run: (s, t) => workspaceApi.clearEvaluations({ ...s, only_non_final: t, reset_request_flags: true }),
       },
       {
         id: 'conversations',
@@ -430,7 +430,7 @@ export default function AdminSection() {
           hint: 'Delete evaluations, tool and token logs of these sessions too.',
         },
         run: async (s, t) => {
-          const r = await adminApi.clearConversations({ ...s, purge_requests: t })
+          const r = await workspaceApi.clearConversations({ ...s, purge_requests: t })
           newChat()
           return r
         },
@@ -445,7 +445,7 @@ export default function AdminSection() {
           ['dashboard', 'requests'],
           ['dashboard', 'tool-executions'],
         ],
-        run: (s) => adminApi.clearRequests(s),
+        run: (s) => workspaceApi.clearRequests(s),
       },
       {
         id: 'errors',
@@ -454,7 +454,7 @@ export default function AdminSection() {
         icon: <Bug className="size-4" />,
         word: 'CLEAR',
         optimistic: [['dashboard', 'recent-errors']],
-        run: (s) => adminApi.clearErrors(s),
+        run: (s) => workspaceApi.clearErrors(s),
       },
       {
         id: 'code',
@@ -462,8 +462,8 @@ export default function AdminSection() {
         description: 'Removes stored sandbox runs, including code, stdout and stderr.',
         icon: <SquareTerminal className="size-4" />,
         word: 'CLEAR',
-        optimistic: [['admin', 'code-executions']],
-        run: (s) => adminApi.clearCodeExecutions(s),
+        optimistic: [['workspace', 'code-executions']],
+        run: (s) => workspaceApi.clearCodeExecutions(s),
       },
       {
         id: 'retrievals',
@@ -472,7 +472,7 @@ export default function AdminSection() {
         icon: <Database className="size-4" />,
         word: 'CLEAR',
         optimistic: [],
-        run: (s) => adminApi.clearRetrievals(s),
+        run: (s) => workspaceApi.clearRetrievals(s),
       },
     ],
     [newChat],
@@ -481,7 +481,7 @@ export default function AdminSection() {
   const [resetWord, setResetWord] = useState('')
   const queryClient = useQueryClient()
   const reset = useMutation({
-    mutationFn: () => adminApi.resetMetrics({ confirm: 'RESET', reset_chunk_counters: true }),
+    mutationFn: () => workspaceApi.resetMetrics({ confirm: 'RESET', reset_chunk_counters: true }),
     onSuccess: (r) => {
       toast.success(`Metrics reset · ${r.deleted} records removed`)
       queryClient.invalidateQueries()
@@ -489,8 +489,8 @@ export default function AdminSection() {
   })
   return (
     <Section
-      id="admin"
-      description="Management operations. Every destructive action asks for confirmation and requires the admin API key."
+      id="controls"
+      description="Manage the data stored for your account. Every destructive action asks for confirmation and only affects your own data."
     >
       <SystemPanel />
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-5">
@@ -518,9 +518,10 @@ export default function AdminSection() {
                 <RotateCcw className="size-4" aria-hidden />
               </span>
               <div className="min-w-0 flex-1">
-                <div className="text-sm font-bold">Reset all metrics</div>
+                <div className="text-sm font-bold">Reset my metrics</div>
                 <div className="text-ink-muted text-xs">
-                  Deletes every evaluation, tool, token, retrieval and error log and resets chunk counters.
+                  Deletes all of your evaluation, tool, token, retrieval and error logs and resets your chunk
+                  counters.
                 </div>
               </div>
               <Button variant="danger" size="sm" onClick={() => setResetOpen(true)}>
@@ -530,7 +531,7 @@ export default function AdminSection() {
           </motion.ul>
         </Card>
         <div className="xl:col-span-2">
-          <DocumentsAdmin />
+          <DocumentsControls />
         </div>
       </div>
       <Dialog
@@ -539,7 +540,7 @@ export default function AdminSection() {
           setResetOpen(v)
           if (!v) setResetWord('')
         }}
-        title="Reset all metrics?"
+        title="Reset my metrics?"
         size="sm"
         footer={
           <>
@@ -565,7 +566,7 @@ export default function AdminSection() {
         <div className="border-error/25 bg-error/[0.06] dark:bg-error/20 flex gap-3 rounded-2xl border p-3.5 text-sm">
           <AlertTriangle className="text-error mt-0.5 size-4 shrink-0" aria-hidden />
           <p className="text-ink-soft">
-            The dashboard returns to zero. Conversations and documents are kept.
+            Your dashboard returns to zero. Your conversations and documents are kept.
           </p>
         </div>
         <label className="mt-4 block text-sm">

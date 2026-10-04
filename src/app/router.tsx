@@ -1,5 +1,6 @@
 import { lazy, Suspense, type ReactNode } from 'react'
 import { createBrowserRouter, Navigate } from 'react-router'
+import { PublicOnly, RequireAuth } from '@/features/auth/AuthGate'
 import { RootLayout } from './layouts/RootLayout'
 import { RouteError } from './RouteError'
 import { ChatPageSkeleton, DashboardPageSkeleton } from './PageSkeletons'
@@ -9,14 +10,31 @@ export const loadDashboardPage = () => import('@/features/dashboard/DashboardPag
 
 const ChatPage = lazy(loadChatPage)
 const DashboardPage = lazy(loadDashboardPage)
+const AccountPage = lazy(() => import('@/features/account/AccountPage'))
+const LoginPage = lazy(() => import('@/features/auth/LoginPage'))
+const RegisterPage = lazy(() => import('@/features/auth/RegisterPage'))
 const NotFound = lazy(() => import('./NotFound'))
 
 const suspend = (node: ReactNode, fallback: ReactNode) => <Suspense fallback={fallback}>{node}</Suspense>
 
 export const router = createBrowserRouter([
   {
+    path: '/veriloom/login',
+    element: <PublicOnly>{suspend(<LoginPage />, null)}</PublicOnly>,
+    errorElement: <RouteError />,
+  },
+  {
+    path: '/veriloom/register',
+    element: <PublicOnly>{suspend(<RegisterPage />, null)}</PublicOnly>,
+    errorElement: <RouteError />,
+  },
+  {
     path: '/',
-    element: <RootLayout />,
+    element: (
+      <RequireAuth>
+        <RootLayout />
+      </RequireAuth>
+    ),
     errorElement: <RouteError />,
     children: [
       { index: true, element: <Navigate to="/veriloom/chat/ai-assistant" replace /> },
@@ -31,6 +49,11 @@ export const router = createBrowserRouter([
       {
         path: 'veriloom/agent_eval/dashboard',
         element: suspend(<DashboardPage />, <DashboardPageSkeleton />),
+        errorElement: <RouteError />,
+      },
+      {
+        path: 'veriloom/account',
+        element: suspend(<AccountPage />, null),
         errorElement: <RouteError />,
       },
       { path: '*', element: suspend(<NotFound />, null) },

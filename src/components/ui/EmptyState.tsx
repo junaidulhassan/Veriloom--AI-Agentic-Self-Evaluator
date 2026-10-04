@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
-import { Inbox, RotateCw, ServerCrash, ShieldAlert } from 'lucide-react'
+import { Inbox, LogIn, RotateCw, ServerCrash, ShieldAlert } from 'lucide-react'
+import { Link } from 'react-router'
 import { cn } from '@/lib/utils'
 import { describeError, toApiError } from '@/api/errors'
-import { Button } from './Button'
-import { AdminKeyForm } from './AdminKeyForm'
+import { Button, buttonVariants } from './Button'
 
 export function EmptyState({
   icon,
@@ -68,9 +68,14 @@ export function ErrorState({
         compact={compact}
         className={className}
         icon={<ShieldAlert className="size-5" aria-hidden />}
-        title="Admin key required"
-        description="This data is protected by the backend admin API key. Enter it to unlock admin views on this device."
-        action={<AdminKeyForm onSaved={onRetry} />}
+        title="Sign in required"
+        description="Your session has ended. Sign in again to see your data."
+        action={
+          <Link to="/veriloom/login" className={buttonVariants({ size: 'sm' })}>
+            <LogIn className="size-3.5" aria-hidden />
+            Sign in
+          </Link>
+        }
       />
     )
   }

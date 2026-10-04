@@ -1,25 +1,16 @@
 import axios, { AxiosError, type AxiosRequestConfig, type InternalAxiosRequestConfig } from 'axios'
 import { env } from '@/lib/env'
-import { useSettingsStore } from '@/store/settings'
 import { ApiError, fromErrorBody } from './errors'
+import { notifyUnauthorized } from './session'
 
 type RetryConfig = InternalAxiosRequestConfig & { __retryCount?: number }
-
-export function getAdminKey() {
-  return useSettingsStore.getState().adminKey || env.adminApiKey
-}
 
 export const http = axios.create({
   baseURL: env.apiBaseUrl,
   timeout: env.timeoutMs,
+  withCredentials: true,
   headers: { Accept: 'application/json' },
   paramsSerializer: { indexes: null },
-})
-
-http.interceptors.request.use((config) => {
-  const key = getAdminKey()
-  if (key) config.headers.set('X-Admin-Key', key)
-  return config
 })
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -44,6 +35,7 @@ http.interceptors.response.use(
       return http.request(config)
     }
     if (error.response) {
+      if (status === 401 && !config?.url?.startsWith('/auth/')) notifyUnauthorized()
       return Promise.reject(fromErrorBody(status, error.response.data, error.message))
     }
     return Promise.reject(

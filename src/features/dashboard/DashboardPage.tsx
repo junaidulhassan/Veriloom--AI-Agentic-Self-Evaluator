@@ -23,7 +23,7 @@ const modules: Record<string, ComponentType> = {
   rag: lazy(() => import('./sections/RagSection')),
   explorer: lazy(() => import('./sections/ExplorerSection')),
   history: lazy(() => import('./sections/HistorySection')),
-  admin: lazy(() => import('./sections/AdminSection')),
+  controls: lazy(() => import('./sections/ControlsSection')),
 }
 
 function SectionFallback({ id }: { id: string }) {

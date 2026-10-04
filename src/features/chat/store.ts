@@ -31,6 +31,7 @@ interface ChatState {
   updateTurn: (key: string, updater: (turn: LiveTurn) => LiveTurn) => void
   removeTurn: (key: string) => void
   setDraft: (draft: string) => void
+  reset: () => void
 }
 
 export const useChatStore = create<ChatState>()(
@@ -48,6 +49,7 @@ export const useChatStore = create<ChatState>()(
         set((state) => ({ turns: state.turns.map((turn) => (turn.key === key ? updater(turn) : turn)) })),
       removeTurn: (key) => set((state) => ({ turns: state.turns.filter((turn) => turn.key !== key) })),
       setDraft: (draft) => set({ draft }),
+      reset: () => set({ activeConversationId: null, selectedRequestId: null, turns: [], draft: '' }),
     }),
     {
       name: 'veriloom.chat',

@@ -5,7 +5,7 @@ import {
   type RequestFilters,
   type ToolExecutionFilters,
 } from '@/api/dashboard'
-import { adminApi } from '@/api/admin'
+import { workspaceApi } from '@/api/workspace'
 import { qk } from '@/api/keys'
 import { systemApi } from '@/api/system'
 import type { TimeWindowParams, TokenGroupBy } from '@/types/api'
@@ -106,8 +106,8 @@ export function useToolCatalog() {
 export function useCodeExecutions(page: number, status?: string) {
   const { window } = useDashboardFilters()
   return useQuery({
-    queryKey: qk.admin('code-executions', { window, page, status }),
-    queryFn: () => adminApi.codeExecutions({ ...window, page, page_size: 8, status }),
+    queryKey: qk.workspace('code-executions', { window, page, status }),
+    queryFn: () => workspaceApi.codeExecutions({ ...window, page, page_size: 8, status }),
     placeholderData: keepPreviousData,
     retry: false,
   })
@@ -116,8 +116,8 @@ export function useCodeExecutions(page: number, status?: string) {
 export function useSelfCorrections(page: number) {
   const { window } = useDashboardFilters()
   return useQuery({
-    queryKey: qk.admin('self-corrections', { window, page }),
-    queryFn: () => adminApi.selfCorrections({ ...window, page, page_size: 5 }),
+    queryKey: qk.workspace('self-corrections', { window, page }),
+    queryFn: () => workspaceApi.selfCorrections({ ...window, page, page_size: 5 }),
     placeholderData: keepPreviousData,
     retry: false,
   })
