@@ -75,6 +75,8 @@ function normalizeMath(content: string) {
           if (prose || /^\s|\s$/.test(inner)) return `${lead}\\$${inner}\\$`
           return `${lead}$${escapePercent(inner)}$`
         })
+        .replace(/(?<!\\)\\\[([\s\S]+?)(?<!\\)\\\]/g, (_m, inner: string) => `\n\n$$\n${escapePercent(inner.trim())}\n$$\n\n`)
+        .replace(/(?<!\\)\\\((.+?)(?<!\\)\\\)/g, (_m, inner: string) => `$${escapePercent(inner.trim())}$`)
     })
     .join('')
 }
